@@ -7,6 +7,15 @@ const chai = require("chai");
 
 chai.use(chaiSorted);
 
+const satisfyAll = (array, key, value) => {
+  //used to check key '===' value for all objects in an array
+  let condition = true;
+  array.forEach(items => {
+    if (items[key] !== value) condition = false;
+  });
+  return condition;
+};
+
 describe("/api", () => {
   after(() => {
     client.destroy();
@@ -16,13 +25,16 @@ describe("/api", () => {
     return client.seed.run();
   });
 
-  describe("/articles", () => {
-    it("GET response returns array of articles with all fields ", () => {
+  describe.only("/articles", () => {
+    it("GET response returns array of articles with all fields defualt sorted by created_at desc ", () => {
       return request(app)
         .get("/api/articles/")
         .expect(200)
         .then(res => {
           expect(res.body.articles).to.be.a("array");
+          expect(res.body.articles).to.be.sortedBy("created_at", {
+            descending: true
+          });
           expect(res.body.articles[0]).to.contain.keys(
             "author",
             "title",
@@ -35,6 +47,35 @@ describe("/api", () => {
           );
         });
     });
+
+    it("GET response returns array sorted by requested field an dorder", () => {
+      return request(app)
+        .get("/api/articles?sort_by=votes&order=asc")
+        .expect(200)
+        .then(res => {
+          expect(res.body.articles).to.be.sortedBy("votes", {
+            ascending: true
+          });
+        });
+    });
+    it("GET response returns array filtered by the author specified", () => {
+      return request(app)
+        .get("/api/articles?author=rogersop")
+        .expect(200)
+        .then(res => {
+          expect(satisfyAll(res.body.articles, "author", "rogersop"));
+        });
+    });
+    it("GET response returns array filtered by the topic specified", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(res => {
+          expect(satisfyAll(res.body.articles, "topic", "cats"));
+        });
+    });
+  });
+  describe("/articles/article_id", () => {
     it("GET response with article ID returns one article object", () => {
       return request(app)
         .get("/api/articles/1")
@@ -57,7 +98,7 @@ describe("/api", () => {
         .get("/api/articles/99999")
         .expect(404)
         .then(res => {
-          expect(res.body.message).to.eql("article_id not found");
+          expect(res.body.message).to.eql("article_id 99999 not found");
         });
     });
     it("GET response is 400 when article_id invalid", () => {
@@ -137,12 +178,11 @@ describe("/api", () => {
         .send({ inc_votes: 1 })
         .expect(404)
         .then(res => {
-          expect(res.body.message).to.eql("article_id not found");
+          expect(res.body.message).to.eql("article_id 99999 not found");
         });
     });
   });
-
-  describe.only("/articles/:article_id/comments", () => {
+  describe("/articles/:article_id/comments", () => {
     it("POST request responds with 200 and posted comment", () => {
       return request(app)
         .post("/api/articles/1/comments")
@@ -159,7 +199,7 @@ describe("/api", () => {
           );
         });
     });
-    it("GET request responds with 200 and array of comments", () => {
+    it("GET request responds with 200 and array of comments defaulted tp sorted by created at desc", () => {
       return request(app)
         .get("/api/articles/1/comments")
         .expect(200)
@@ -173,6 +213,37 @@ describe("/api", () => {
             "votes"
           );
           expect(res.body.comments[0].article_id).to.equal(1);
+          expect(res.body.comments).to.be.sortedBy("created_at", {
+            descending: true
+          });
+        });
+    });
+    it("GET request responds with 200 and array of comments sorted by votes asc", () => {
+      return request(app)
+        .get("/api/articles/1/comments?sort_by=votes&order=asc")
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments).to.be.sortedBy("votes", {
+            ascending: true
+          });
+        });
+    });
+    it("GET response is 400 when query value is invalid", () => {
+      return request(app)
+        .get("/api/articles/1/comments?sort_by=not_a_column&order=asc")
+        .expect(400)
+        .then(res => {
+          expect(res.body.message).to.equal("invalid query value");
+        });
+    });
+    it("GET response is 404 when article id not found", () => {
+      return request(app)
+        .get("/api/articles/999999/comments?sort_by=votes&order=asc")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal(
+            "comments for article_id 999999 not found"
+          );
         });
     });
   });

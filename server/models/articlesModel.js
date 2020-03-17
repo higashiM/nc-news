@@ -9,7 +9,7 @@ exports.incrementVote = (query, voteValue) => {
       if (articles.length === 0) {
         return Promise.reject({
           status: 404,
-          message: "article_id not found"
+          message: `article_id ${query.article_id} not found`
         });
       } else return articles;
     });
@@ -26,9 +26,17 @@ exports.fetchArticles = query => {
       "articles.created_at",
       "articles.votes"
     )
+    .orderBy(query.sort_by || "created_at", query.order || "desc")
     .modify(queryBuilder => {
       if (query.article_id)
         queryBuilder.where("articles.article_id", "=", query.article_id);
+    })
+    .modify(queryBuilder => {
+      if (query.author)
+        queryBuilder.where("articles.author", "=", query.author);
+    })
+    .modify(queryBuilder => {
+      if (query.topic) queryBuilder.where("articles.topic", "=", query.topic);
     })
     .join("comments", "articles.article_id", "comments.article_id")
     .count("comments.comment_id as comment_count")
@@ -45,7 +53,7 @@ exports.fetchArticles = query => {
       if (articles.length === 0) {
         return Promise.reject({
           status: 404,
-          message: "article_id not found"
+          message: `article_id ${query.article_id} not found`
         });
       } else return articles;
     });
@@ -64,20 +72,22 @@ exports.addCommentToArticle = (comment, article_id) => {
       if (comments.length === 0) {
         return Promise.reject({
           status: 404,
-          message: "article_id not found"
+          message: `article_id ${article_id} not found`
         });
       } else return comments;
     });
 };
-exports.fetchCommentsFromArticle = article_id => {
+
+exports.fetchCommentsFromArticle = (article_id, query) => {
   return client("comments")
     .select("*")
     .where("article_id", "=", article_id)
+    .orderBy(query.sort_by || "created_at", query.order || "desc")
     .then(comments => {
       if (comments.length === 0) {
         return Promise.reject({
           status: 404,
-          message: "article_id not found"
+          message: `comments for article_id ${article_id} not found`
         });
       } else return comments;
     });
