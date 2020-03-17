@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { customErrors, psqlErrors } = require("./errors/index");
+const { customErrors, psqlErrors, otherErrors } = require("./errors/index");
 
 const apiRouter = require("./routers/apiRouter");
 
@@ -13,5 +13,6 @@ app.all("/*", (req, res, next) =>
 //add 500
 app.use(psqlErrors);
 app.use(customErrors);
+app.use(otherErrors);
 
 module.exports = app;

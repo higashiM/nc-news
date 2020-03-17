@@ -8,10 +8,10 @@ exports.customErrors = (err, req, res, next) => {
 
 exports.psqlErrors = (err, req, res, next) => {
   const psqlCodes = {
-    /*     "42703": { status: 400, message: err.message },
-    "23502": { status: 400, message: err.message },
-    "23503": { status: 404, message: err.message },
-    "22P02": { status: 400, message: err.message } */
+    "42703": { status: 400, message: err.code },
+    "23502": { status: 400, message: err.code },
+    "23503": { status: 404, message: err.code },
+    "22P02": { status: 400, message: "invalid user input" }
   };
   if (psqlCodes[err.code]) {
     const { status, message } = psqlCodes[err.code];
@@ -19,4 +19,10 @@ exports.psqlErrors = (err, req, res, next) => {
   } else {
     next(err);
   }
+};
+
+exports.otherErrors = (err, req, res, next) => {
+  res.status(500);
+  console.log(err);
+  res.send(err);
 };

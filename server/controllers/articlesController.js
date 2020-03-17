@@ -1,31 +1,48 @@
 const {
-  fetchAllArticles,
-  fetchOneArticle,
-  patchOneArticle,
+  fetchArticles,
+  incrementVote,
   addCommentToArticle,
   fetchCommentsFromArticle
 } = require("../models/articlesModel");
 
-exports.getArticles = () => {
-  fetchAllArticles();
-  console.log("reached the articles controller!");
+exports.getArticles = (req, res, next) => {
+  fetchArticles(req.params)
+    .then(articles => {
+      res.status(200).send({ articles });
+    })
+    .catch(next);
 };
 
-exports.getArticle_id = () => {
-  fetchOneArticle();
-  console.log("reached the articles controller!");
+exports.getArticle_id = (req, res, next) => {
+  fetchArticles(req.params)
+    .then(articles => {
+      const article = articles[0];
+      res.status(200).send({ article });
+    })
+    .catch(next);
 };
-exports.patchArticle_id = () => {
-  patchOneArticle();
-  console.log("reached the articles controller!");
+exports.patchArticle_id = (req, res, next) => {
+  incrementVote(req.params, req.body.inc_votes)
+    .then(articles => {
+      const article = articles[0];
+      res.status(200).send({ article });
+    })
+    .catch(next);
 };
 
-exports.postArticleComments = () => {
-  addCommentToArticle();
-  console.log("reached the articles controller!");
+exports.postArticleComments = (req, res, next) => {
+  addCommentToArticle(req.body, req.params.article_id)
+    .then(comments => {
+      const comment = comments[0];
+      res.status(200).send({ comment });
+    })
+    .catch(next);
 };
 
-exports.getArticleComments = () => {
-  fetchCommentsFromArticle();
-  console.log("reached the articles controller!");
+exports.getArticleComments = (req, res, next) => {
+  fetchCommentsFromArticle(req.params.article_id)
+    .then(comments => {
+      res.status(200).send({ comments });
+    })
+    .catch(next);
 };
