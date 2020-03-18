@@ -25,7 +25,7 @@ describe("/api", () => {
     return client.seed.run();
   });
 
-  describe.only("/articles", () => {
+  describe("/articles", () => {
     it("GET response returns array of articles with all fields defualt sorted by created_at desc ", () => {
       return request(app)
         .get("/api/articles/")
@@ -63,7 +63,9 @@ describe("/api", () => {
         .get("/api/articles?author=rogersop")
         .expect(200)
         .then(res => {
-          expect(satisfyAll(res.body.articles, "author", "rogersop"));
+          expect(res.body.articles).to.satisfy(function(articles) {
+            return satisfyAll(articles, "author", "rogersop");
+          });
         });
     });
     it("GET response returns array filtered by the topic specified", () => {
@@ -71,7 +73,25 @@ describe("/api", () => {
         .get("/api/articles?topic=cats")
         .expect(200)
         .then(res => {
-          expect(satisfyAll(res.body.articles, "topic", "cats"));
+          expect(res.body.articles).to.satisfy(function(articles) {
+            return satisfyAll(articles, "topic", "cats");
+          });
+        });
+    });
+    it("GET response returns a 404 when query value is not found", () => {
+      return request(app)
+        .get("/api/articles?author=cats")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("author 'cats' not found");
+        });
+    });
+    it("GET response returns a 422 when query value is syntactically correct but cannot be processed", () => {
+      return request(app)
+        .get("/api/articles?article_topic=cats")
+        .expect(422)
+        .then(res => {
+          expect(res.body.message).to.equal("query field can not be processed");
         });
     });
   });
@@ -109,24 +129,7 @@ describe("/api", () => {
           expect(res.body.message).to.eql("invalid user input");
         });
     });
-    it("PATCH response is 200 and returns updated article", () => {
-      return request(app)
-        .patch("/api/articles/1")
-        .send({ inc_votes: 1 })
-        .expect(200)
-        .then(res => {
-          expect(res.body.article).to.contain.keys(
-            "author",
-            "title",
-            "article_id",
-            "body",
-            "topic",
-            "created_at",
-            "votes"
-          );
-          expect(res.body.article.votes).to.equal(101);
-        });
-    });
+
     it("PATCH response is 200 and returns updated article with positive votes incremented", () => {
       return request(app)
         .patch("/api/articles/1")
@@ -181,6 +184,15 @@ describe("/api", () => {
           expect(res.body.message).to.eql("article_id 99999 not found");
         });
     });
+    it("PATCH request responds with 422 when request is symantically incorrect", () => {
+      return request(app)
+        .patch("/api/articles/1")
+        .send({ add_votes: 1 })
+        .expect(422)
+        .then(res => {
+          expect(res.body.message).to.eql("request field can not be processed");
+        });
+    });
   });
   describe("/articles/:article_id/comments", () => {
     it("POST request responds with 200 and posted comment", () => {
@@ -212,7 +224,10 @@ describe("/api", () => {
             "body",
             "votes"
           );
-          expect(res.body.comments[0].article_id).to.equal(1);
+          expect(res.body.comments).to.satisfy(function(comments) {
+            return satisfyAll(comments, "article_id", 1);
+          });
+
           expect(res.body.comments).to.be.sortedBy("created_at", {
             descending: true
           });
@@ -270,13 +285,95 @@ describe("/api", () => {
     });
   });
   describe("/comments", () => {
-    it("GET response ", () => {
-      return request(app)
-        .get("/api/comments")
-        .expect(200)
-        .then(res => {});
+    describe("/comments/:comment_id", () => {
+      it("PATCH request increments comment votes and responds with 200 and updated comment", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_votes: 84 })
+          .expect(200)
+          .then(res => {
+            expect(res.body.comment.votes).to.equal(100);
+            expect(res.body.comment).to.contain.keys(
+              "comment_id",
+              "author",
+              "article_id",
+              "created_at",
+              "body",
+              "votes"
+            );
+          });
+      });
+      it("PATCH request responds with 400 when invalid update value", () => {
+        return request(app)
+          .patch("/api/comments/1")
+          .send({ inc_votes: "loadsavotes" })
+          .expect(400)
+          .then(res => {
+            expect(res.body.message).to.eql("invalid user input");
+          });
+      });
+      it("PATCH request responds with 400 when invalid article_id in request", () => {
+        return request(app)
+          .patch("/api/comments/not_a_valid_id")
+          .send({ inc_votes: 1 })
+          .expect(400)
+          .then(res => {
+            expect(res.body.message).to.eql("invalid user input");
+          });
+      });
+      it("PATCH request responds with 404 when article id does not exist", () => {
+        return request(app)
+          .patch("/api/comments/99999")
+          .send({ inc_votes: 1 })
+          .expect(404)
+          .then(res => {
+            expect(res.body.message).to.eql("comment_id 99999 not found");
+          });
+      });
+      it("DELETE request responds with 204 and no content", () => {
+        return request(app)
+          .delete("/api/comments/1")
+          .expect(204)
+          .then(res => {});
+      });
+      it("DELETE request responds with 404 when article id does not exist", () => {
+        return request(app)
+          .delete("/api/comments/99999")
+          .expect(404)
+          .then(res => {
+            expect(res.body.message).to.eql("comment_id 99999 not found");
+          });
+      });
+      it("DELETE request responds with 400 when invalid article_id in request", () => {
+        return request(app)
+          .delete("/api/comments/not_a_valid_id")
+          .expect(400)
+          .then(res => {
+            expect(res.body.message).to.eql("invalid user input");
+          });
+      });
+      it("Non supported method request returns a 405", () => {
+        const invalidMethods = ["put", "get"];
+        const methodPromises = invalidMethods.map(method => {
+          return request(app)
+            [method]("/api/comments/1")
+            .expect(405);
+        });
+        return Promise.all(methodPromises);
+      });
     });
   });
+  describe("/iamateapot", () => {
+    it("GET response returns a 418", () => {
+      return request(app)
+        .get("/api/iamateapot")
+        .expect(418)
+        .then(res => {
+          expect(res.body.message).to.equal("we are all teapots");
+        });
+    });
+  });
+
   describe("/users", () => {
     it("GET response for a user ID returns an object with username, avatar url and name ", () => {
       return request(app)

@@ -1,6 +1,6 @@
 const {
   fetchArticles,
-  incrementVote,
+  incrementArticleVote,
   addCommentToArticle,
   fetchCommentsFromArticle
 } = require("../models/articlesModel");
@@ -22,7 +22,7 @@ exports.getArticle_id = (req, res, next) => {
     .catch(next);
 };
 exports.patchArticle_id = (req, res, next) => {
-  incrementVote(req.params, req.body.inc_votes)
+  incrementArticleVote(req.params, req.body.inc_votes)
     .then(articles => {
       const article = articles[0];
       res.status(200).send({ article });
@@ -40,7 +40,7 @@ exports.postArticleComments = (req, res, next) => {
 };
 
 exports.getArticleComments = (req, res, next) => {
-  fetchCommentsFromArticle(req.params.article_id)
+  fetchCommentsFromArticle(req.params.article_id, req.query)
     .then(comments => {
       res.status(200).send({ comments });
     })

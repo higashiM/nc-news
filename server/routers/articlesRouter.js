@@ -8,10 +8,21 @@ const {
   getArticleComments
 } = require("../controllers/articlesController");
 
-articlesRouter.get("/", getArticles);
-articlesRouter.get("/:article_id", getArticle_id);
-articlesRouter.patch("/:article_id", patchArticle_id);
-articlesRouter.post("/:article_id/comments", postArticleComments);
-articlesRouter.get("/:article_id/comments", getArticleComments);
+articlesRouter
+  .route("/")
+  .get(getArticles)
+  .all((req, res, next) => res.sendStatus(405));
+
+articlesRouter
+  .route("/:article_id")
+  .get(getArticle_id)
+  .patch(patchArticle_id)
+  .all((req, res, next) => res.sendStatus(405));
+
+articlesRouter
+  .route("/:article_id/comments")
+  .post(postArticleComments)
+  .get(getArticleComments)
+  .all((req, res, next) => res.sendStatus(405));
 
 module.exports = articlesRouter;

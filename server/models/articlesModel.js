@@ -1,6 +1,12 @@
 const client = require("/home/gareth/Desktop/northcoders/week5/nc-news/db/connection.js");
 
-exports.incrementVote = (query, voteValue) => {
+exports.incrementArticleVote = (query, voteValue) => {
+  if (!voteValue)
+    return Promise.reject({
+      status: 422,
+      message: "request field can not be processed"
+    });
+
   return client("articles")
     .where("article_id", "=", query.article_id)
     .increment("votes", voteValue)
@@ -16,17 +22,27 @@ exports.incrementVote = (query, voteValue) => {
 };
 exports.fetchOneArticle = () => {};
 exports.fetchArticles = query => {
-  return client("articles")
-    .select(
-      "articles.author",
-      "articles.title",
-      "articles.article_id",
-      "articles.body",
-      "articles.topic",
-      "articles.created_at",
-      "articles.votes"
-    )
-    .orderBy(query.sort_by || "created_at", query.order || "desc")
+  const allowedQueryFields = [
+    "author",
+    "topic",
+    "article_id",
+    "sort_by",
+    "order"
+  ];
+  const queryFields = Object.keys(query);
+
+  for (let i = 0; i < queryFields.length; i++) {
+    if (allowedQueryFields.includes(queryFields[i]) === false) {
+      return Promise.reject({
+        status: 422,
+        message: "query field can not be processed"
+      });
+    }
+  }
+
+  return client
+    .select("articles.*")
+    .from("articles")
     .modify(queryBuilder => {
       if (query.article_id)
         queryBuilder.where("articles.article_id", "=", query.article_id);
@@ -38,22 +54,21 @@ exports.fetchArticles = query => {
     .modify(queryBuilder => {
       if (query.topic) queryBuilder.where("articles.topic", "=", query.topic);
     })
-    .join("comments", "articles.article_id", "comments.article_id")
+    .leftJoin("comments", "articles.article_id", "comments.article_id")
+    .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .groupBy("articles.article_id")
     .count("comments.comment_id as comment_count")
-    .groupBy(
-      "articles.author",
-      "articles.title",
-      "articles.article_id",
-      "articles.body",
-      "articles.topic",
-      "articles.created_at",
-      "articles.votes"
-    )
     .then(articles => {
       if (articles.length === 0) {
+        message = "Invalid query value)";
+        if (query.article_id)
+          message = `article_id ${query.article_id} not found`;
+        if (query.topic) message = `topic '${query.topic}' not found`;
+        if (query.author) message = `author '${query.author}' not found`;
+
         return Promise.reject({
           status: 404,
-          message: `article_id ${query.article_id} not found`
+          message: message
         });
       } else return articles;
     });

@@ -10,7 +10,7 @@ app.use("/api", apiRouter);
 app.all("/*", (req, res, next) =>
   next({ status: 404, message: "404: File Not Found" })
 );
-//add 500
+
 app.use(psqlErrors);
 app.use(customErrors);
 app.use(otherErrors);

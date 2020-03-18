@@ -4,7 +4,10 @@ const {
   deleteComment
 } = require("../controllers/commentsController");
 
-commentsRouter.patch("/:comment_id", patchComment);
-commentsRouter.delete("/:comment_id", deleteComment);
+commentsRouter
+  .route("/:comment_id")
+  .patch(patchComment)
+  .delete(deleteComment)
+  .all((req, res, next) => res.sendStatus(405));
 
 module.exports = commentsRouter;
