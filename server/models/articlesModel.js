@@ -74,6 +74,13 @@ exports.fetchArticles = query => {
     });
 };
 exports.addCommentToArticle = (comment, article_id) => {
+  if (!comment.body || !comment.username) {
+    return Promise.reject({
+      status: 422,
+      message: "request field can not be processed"
+    });
+  }
+
   const newComment = {
     body: comment.body,
     author: comment.username,

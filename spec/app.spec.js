@@ -28,7 +28,8 @@ describe("/api", () => {
   it("GET response returns a JSON object describing the paths", () => {
     return request(app)
       .get("/api")
-      .expect(200);
+      .expect(200)
+      .then(res => expect(res.body.endPoints).to.be.a("object"));
   });
 
   describe("/articles", () => {
@@ -190,7 +191,7 @@ describe("/api", () => {
           expect(res.body.message).to.eql("article_id 99999 not found");
         });
     });
-    it("PATCH request responds with 422 when request is symantically incorrect", () => {
+    it("PATCH response returns a 422 when query value is syntactically correct but cannot be processed", () => {
       return request(app)
         .patch("/api/articles/1")
         .send({ add_votes: 1 })
@@ -217,6 +218,31 @@ describe("/api", () => {
           );
         });
     });
+    it("POST response returns a 422 when query value is syntactically correct but cannot be processed", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          comments_username: "lurker",
+          body: "soooooooo eye gougingly BORING!!"
+        })
+        .expect(422)
+        .then(res => {
+          expect(res.body.message).to.eql("request field can not be processed");
+        });
+    });
+    it("POST response returns a 422 when username is not found", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          username: "lurkers",
+          body: "soooooooo eye gougingly BORING!!"
+        })
+        .expect(422)
+        .then(res => {
+          expect(res.body.message).to.eql("request field can not be processed");
+        });
+    });
+
     it("GET request responds with 200 and array of comments defaulted tp sorted by created at desc", () => {
       return request(app)
         .get("/api/articles/1/comments")

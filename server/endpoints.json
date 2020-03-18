@@ -1,0 +1,136 @@
+{
+  "GET /api": {
+    "description": "serves up a json representation of all the available endpoints of the api"
+  },
+  "GET /api/topics": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [
+        {
+          "slug": "mitch",
+          "description": "The man, the Mitch, the legend"
+        }
+      ]
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an object of user information",
+    "queries": [],
+    "exampleResponse": {
+      "user": {
+        "username": "rogersop",
+        "avatar_url": "https://avatars2.githubusercontent.com/u/24394918?s=400&v=4",
+        "name": "paul"
+      }
+    }
+  },
+
+  "PATCH /api/comments/:comment_id": {
+    "description": "increments by given value(or decrements for negative values) votes for comment_id and returns the comment info",
+    "queries": [],
+    "exampleRequest": { "inc_votes": 3 },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 1,
+        "author": "butter_bridge",
+        "article_id": 9,
+        "votes": 20,
+        "created_at": "2017-11-22T12:36:03.389Z",
+        "body": "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"
+      }
+    }
+  },
+
+  "DELETE/api/comments/:comment_id": {
+    "description": "deletes comment for a given comment id",
+    "queries": [],
+    "exampleResponse": {}
+  },
+
+  "GET /api/articles": {
+    "description": "serves an array of all topics",
+    "queries": ["author", "topic", "sort_by", "order"],
+    "exampleResponse": {
+      "articles": [
+        {
+          "article_id": 1,
+          "title": "Living in the shadow of a great man",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "I find this existence challenging",
+          "created_at": "2018-11-15T12:21:54.171Z",
+          "votes": 100,
+          "comment_count": "14"
+        }
+      ]
+    },
+    "GET /api/articles/:article_id": {
+      "description": "serves an object with article information for the given article_id",
+      "queries": [],
+      "exampleResponse": {
+        "article": {
+          "article_id": 1,
+          "title": "Living in the shadow of a great man",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "I find this existence challenging",
+          "created_at": "2018-11-15T12:21:54.171Z",
+          "votes": 100,
+          "comment_count": "13"
+        }
+      }
+    },
+    "PATCH /api/articles/:article_id": {
+      "description": "increments by given value(or decrements for negative values) votes for article_id and returns the article info",
+      "queries": [],
+      "exampleRequest": { "inc_votes": 1 },
+      "exampleResponse": {
+        "article": {
+          "article_id": 12,
+          "title": "Moustache",
+          "topic": "mitch",
+          "author": "butter_bridge",
+          "body": "Have you seen the size of that thing?",
+          "created_at": "1974-11-26T12:21:54.171Z",
+          "votes": 1
+        }
+      }
+    },
+
+    "GET /api/articles/:article_id/comments": {
+      "description": "serves an array of comments for a given article_id parameter",
+      "queries": [],
+      "exampleResponse": {
+        "comments": [
+          {
+            "comment_id": 2,
+            "author": "butter_bridge",
+            "article_id": 1,
+            "votes": 14,
+            "created_at": "2016-11-22T12:36:03.389Z",
+            "body": "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky."
+          }
+        ]
+      },
+      "POST /api/articles/:article_id/comments": {
+        "description": "posts a new comment to an article and returns the created comment",
+        "queries": [],
+        "exampleRequest": {
+          "username": "lurker",
+          "body": "soooooooo eye gougingly BORING!!"
+        },
+        "exampleResponse": {
+          "comment": {
+            "comment_id": 22,
+            "author": "lurker",
+            "article_id": 12,
+            "votes": 0,
+            "created_at": "2020-03-18T14:36:19.000Z",
+            "body": "soooooooo eye gougingly BORING!!"
+          }
+        }
+      }
+    }
+  }
+}

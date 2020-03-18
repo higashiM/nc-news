@@ -9,6 +9,10 @@ exports.customErrors = (err, req, res, next) => {
 exports.psqlErrors = (err, req, res, next) => {
   const psqlCodes = {
     "42703": { status: 400, message: "invalid query value" },
+    "23503": {
+      status: 422,
+      message: "request field can not be processed"
+    },
     "22P02": { status: 400, message: "invalid user input" }
   };
 
