@@ -100,7 +100,7 @@
 
     "GET /api/articles/:article_id/comments": {
       "description": "serves an array of comments for a given article_id parameter",
-      "queries": [],
+      "queries": ["sort_by", "order"],
       "exampleResponse": {
         "comments": [
           {

@@ -20,7 +20,12 @@ exports.incrementArticleVote = (query, voteValue) => {
       } else return articles;
     });
 };
-exports.fetchOneArticle = () => {};
+exports.fetchOneArticle = article_id => {
+  return client("articles")
+    .select("*")
+    .where("articles.article_id", "=", query.article_id)
+    .then(articles => articles);
+};
 exports.fetchArticles = query => {
   const allowedQueryFields = [
     "author",
