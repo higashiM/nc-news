@@ -1,4 +1,4 @@
-const client = require("/home/gareth/Desktop/northcoders/week5/nc-news/db/connection.js");
+const client = require("../../db/connection");
 
 exports.incrementArticleVote = (query, voteValue) => {
   if (!voteValue)
