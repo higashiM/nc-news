@@ -25,6 +25,12 @@ describe("/api", () => {
     return client.seed.run();
   });
 
+  it("GET response returns a JSON object describing the paths", () => {
+    return request(app)
+      .get("/api")
+      .expect(200);
+  });
+
   describe("/articles", () => {
     it("GET response returns array of articles with all fields defualt sorted by created_at desc ", () => {
       return request(app)
@@ -195,11 +201,11 @@ describe("/api", () => {
     });
   });
   describe("/articles/:article_id/comments", () => {
-    it("POST request responds with 200 and posted comment", () => {
+    it("POST request responds with 201 and posted comment", () => {
       return request(app)
         .post("/api/articles/1/comments")
         .send({ username: "lurker", body: "soooooooo eye gougingly BORING!!" })
-        .expect(200)
+        .expect(201)
         .then(res => {
           expect(res.body.comment).to.contain.keys(
             "comment_id",
