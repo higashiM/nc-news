@@ -230,6 +230,18 @@ describe("/api", () => {
           expect(res.body.message).to.eql("request field can not be processed");
         });
     });
+    it("POST response returns a 422 when required field is null", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+          comments_username: "lurker",
+          body: null
+        })
+        .expect(422)
+        .then(res => {
+          expect(res.body.message).to.eql("request field can not be processed");
+        });
+    });
     it("POST response returns a 422 when username is not found", () => {
       return request(app)
         .post("/api/articles/1/comments")
