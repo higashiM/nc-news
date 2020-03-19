@@ -300,9 +300,7 @@ describe("/api", () => {
         .get("/api/articles/999999/comments?sort_by=votes&order=asc")
         .expect(404)
         .then(res => {
-          expect(res.body.message).to.equal(
-            "comments for article_id 999999 not found"
-          );
+          expect(res.body.message).to.equal("article_id 999999 not found");
         });
     });
   });
@@ -415,6 +413,15 @@ describe("/api", () => {
         .then(res => {
           expect(res.body.message).to.equal("we are all teapots");
         });
+    });
+  });
+
+  describe("/", () => {
+    it("GET response to / redirects to /api with a 302", () => {
+      return request(app)
+        .get("/")
+        .expect(302)
+        .then(res => expect(res.header.location).to.be.equal("/api"));
     });
   });
 

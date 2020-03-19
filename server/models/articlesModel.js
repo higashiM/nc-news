@@ -20,10 +20,10 @@ exports.incrementArticleVote = (query, voteValue) => {
       } else return articles;
     });
 };
-exports.fetchOneArticle = article_id => {
+exports.checkOneArticle = article_id => {
   return client("articles")
-    .select("*")
-    .where("articles.article_id", "=", query.article_id)
+    .first("*")
+    .where("articles.article_id", "=", article_id)
     .then(articles => articles);
 };
 exports.fetchArticles = query => {
@@ -65,7 +65,7 @@ exports.fetchArticles = query => {
     .count("comments.comment_id as comment_count")
     .then(articles => {
       if (articles.length === 0) {
-        message = "Invalid query value)";
+        let message = "Invalid query value)";
         if (query.article_id)
           message = `article_id ${query.article_id} not found`;
         if (query.topic) message = `topic '${query.topic}' not found`;
@@ -76,46 +76,5 @@ exports.fetchArticles = query => {
           message: message
         });
       } else return articles;
-    });
-};
-exports.addCommentToArticle = (comment, article_id) => {
-  if (!comment.body || !comment.username) {
-    return Promise.reject({
-      status: 422,
-      message: "request field can not be processed"
-    });
-  }
-
-  const newComment = {
-    body: comment.body,
-    author: comment.username,
-    article_id
-  };
-
-  return client("comments")
-    .insert(newComment)
-    .returning("*")
-    .then(comments => {
-      if (comments.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: `article_id ${article_id} not found`
-        });
-      } else return comments;
-    });
-};
-
-exports.fetchCommentsFromArticle = (article_id, query) => {
-  return client("comments")
-    .select("*")
-    .where("article_id", "=", article_id)
-    .orderBy(query.sort_by || "created_at", query.order || "desc")
-    .then(comments => {
-      if (comments.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: `comments for article_id ${article_id} not found`
-        });
-      } else return comments;
     });
 };

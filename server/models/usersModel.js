@@ -2,14 +2,11 @@ const client = require("../../db/connection");
 
 exports.fetchUsers = username => {
   return client("users")
-    .select("*")
+    .first("*")
     .where("username", "=", username)
     .then(user => {
-      if (user.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: "username not found"
-        });
-      } else return user;
+      return user
+        ? user
+        : Promise.reject({ status: 404, message: "username not found" });
     });
 };

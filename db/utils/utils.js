@@ -1,11 +1,13 @@
+const moment = require("moment");
+
 exports.formatDates = list => {
   return list.map(item => {
     let newItem = {
       ...item
     };
-    /^[0-9]*$/.test(item.created_at)
-      ? (d = Number(item.created_at))
-      : (d = item.created_at);
+    let d = /^[0-9]*$/.test(item.created_at)
+      ? Number(item.created_at)
+      : item.created_at;
     newItem.created_at = new Date(d);
     return newItem;
   });
@@ -32,7 +34,5 @@ exports.formatComments = (comments, articleRef) => {
     return newItem;
   });
 };
-
-const moment = require("moment");
 
 exports.dateNow = moment.utc();

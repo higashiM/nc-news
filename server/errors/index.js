@@ -16,7 +16,6 @@ exports.psqlErrors = (err, req, res, next) => {
     "22P02": { status: 400, message: "invalid user input" }
   };
 
-  console.log(err.code);
   if (psqlCodes[err.code]) {
     const { status, message } = psqlCodes[err.code];
     res.status(status).send({ message });

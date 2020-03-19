@@ -6,7 +6,7 @@ const apiRouter = require("./routers/apiRouter");
 
 app.use(express.json());
 app.use("/api", apiRouter);
-
+app.get("/", (req, res, next) => res.redirect("/api"));
 app.all("/*", (req, res, next) =>
   next({ status: 404, message: "404: File Not Found" })
 );
