@@ -4,9 +4,13 @@ const {
 } = require("../models/articlesModel");
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles(req.query)
-    .then(articles => {
-      res.status(200).send({ articles });
+  return Promise.all([
+    fetchArticles(req.query, false),
+    fetchArticles(req.query, true)
+  ])
+    .then(([articles, count]) => {
+      total_count = count.count;
+      res.status(200).send({ articles, total_count });
     })
     .catch(next);
 };

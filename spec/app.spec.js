@@ -32,7 +32,7 @@ describe("/api", () => {
       .then(res => expect(res.body.endPoints).to.be.a("object"));
   });
 
-  describe("/articles", () => {
+  describe.only("/articles", () => {
     it("GET response returns array of articles with all fields defualt sorted by created_at desc ", () => {
       return request(app)
         .get("/api/articles/")
@@ -55,9 +55,17 @@ describe("/api", () => {
         });
     });
 
-    it("GET response returns array sorted by requested field an dorder", () => {
+    it("GET response returns a total count of articles", () => {
       return request(app)
-        .get("/api/articles?sort_by=votes&order=asc")
+        .get("/api/articles?sort_by=&order=asc")
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.contain.keys("total_count");
+        });
+    });
+    it("GET response returns array sorted by requested field in asc order", () => {
+      return request(app)
+        .get("/api/articles?sort_by=&order=asc")
         .expect(200)
         .then(res => {
           expect(res.body.articles).to.be.sortedBy("votes", {
