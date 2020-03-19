@@ -32,8 +32,8 @@ describe("/api", () => {
       .then(res => expect(res.body.endPoints).to.be.a("object"));
   });
 
-  describe.only("/articles", () => {
-    it("GET response returns array of articles with all fields defualt sorted by created_at desc ", () => {
+  describe("/articles", () => {
+    it("GET response returns array of articles with all fields default sorted by created_at desc and limited to 10", () => {
       return request(app)
         .get("/api/articles/")
         .expect(200)
@@ -55,17 +55,45 @@ describe("/api", () => {
         });
     });
 
-    it("GET response returns a total count of articles", () => {
+    it("GET response returns a total count of articles ignoring limit", () => {
       return request(app)
-        .get("/api/articles?sort_by=&order=asc")
+        .get("/api/articles?limit=10&sort_by=votes&order=asc")
         .expect(200)
         .then(res => {
-          expect(res.body).to.contain.keys("total_count");
+          expect(Number(res.body.total_count)).to.equal(12);
+          expect(res.body.articles.length).to.equal(10);
         });
     });
+    it("GET response returns a second page of results using default limit and total count is unchanged", () => {
+      return request(app)
+        .get("/api/articles?p=2")
+        .expect(200)
+        .then(res => {
+          expect(Number(res.body.total_count)).to.equal(12);
+          expect(res.body.articles.length).to.equal(2);
+        });
+    });
+    it("GET response returns a third page of results using customlimit and total count is unchanged", () => {
+      return request(app)
+        .get("/api/articles?p=3&limit=4")
+        .expect(200)
+        .then(res => {
+          expect(Number(res.body.total_count)).to.equal(12);
+          expect(res.body.articles.length).to.equal(4);
+        });
+    });
+    it("GET response returns 404 if page requested exceeds limit", () => {
+      return request(app)
+        .get("/api/articles?p=99999")
+        .expect(404)
+        .then(res => {
+          expect(res.body.message).to.equal("Invalid query value");
+        });
+    });
+
     it("GET response returns array sorted by requested field in asc order", () => {
       return request(app)
-        .get("/api/articles?sort_by=&order=asc")
+        .get("/api/articles?sort_by=votes&order=asc")
         .expect(200)
         .then(res => {
           expect(res.body.articles).to.be.sortedBy("votes", {
@@ -209,7 +237,7 @@ describe("/api", () => {
         });
     });
   });
-  describe("/articles/:article_id/comments", () => {
+  describe.only("/articles/:article_id/comments", () => {
     it("POST request responds with 201 and posted comment", () => {
       return request(app)
         .post("/api/articles/1/comments")

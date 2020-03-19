@@ -5,11 +5,11 @@ const {
 
 exports.getArticles = (req, res, next) => {
   return Promise.all([
-    fetchArticles(req.query, false),
-    fetchArticles(req.query, true)
+    fetchArticles(req.query, { countOnly: false }),
+    fetchArticles(req.query, { countOnly: true })
   ])
     .then(([articles, count]) => {
-      total_count = count.count;
+      total_count = count.total_count;
       res.status(200).send({ articles, total_count });
     })
     .catch(next);

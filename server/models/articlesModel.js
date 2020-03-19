@@ -26,13 +26,16 @@ exports.checkOneArticle = article_id => {
     .where("articles.article_id", "=", article_id)
     .then(articles => articles);
 };
-exports.fetchArticles = (query, countOnly) => {
+exports.fetchArticles = (query, countOption) => {
+  const countOnly = countOption.countOnly;
   const allowedQueryFields = [
     "author",
     "topic",
     "article_id",
     "sort_by",
-    "order"
+    "order",
+    "limit",
+    "p"
   ];
   const queryFields = Object.keys(query);
 
@@ -47,18 +50,17 @@ exports.fetchArticles = (query, countOnly) => {
 
   //set defaults
   const limit = query.limit || 10;
-  const offset = query.p * limit || 0;
+  const offset = (query.p - 1) * limit || 0;
   const sort_by = query.sort_by
     ? "articles." + query.sort_by
     : "articles.created_at";
   const order = query.order || "desc";
-
   return (
     client("articles")
       //modify for countonly
       .modify(queryBuilder => {
         if (countOnly) {
-          queryBuilder.count("articles.article_id");
+          queryBuilder.count("articles.article_id as total_count");
           queryBuilder.first();
         }
       })
@@ -68,6 +70,14 @@ exports.fetchArticles = (query, countOnly) => {
           queryBuilder.select("articles.*");
           queryBuilder.limit(limit);
           queryBuilder.offset(offset);
+          queryBuilder.leftJoin(
+            "comments",
+            "articles.article_id",
+            "comments.article_id"
+          );
+          queryBuilder.orderBy(sort_by, order);
+          queryBuilder.groupBy("articles.article_id");
+          queryBuilder.count("comments.comment_id as comment_count");
         }
       })
       .modify(queryBuilder => {
@@ -81,13 +91,10 @@ exports.fetchArticles = (query, countOnly) => {
       .modify(queryBuilder => {
         if (query.topic) queryBuilder.where("articles.topic", "=", query.topic);
       })
-      .leftJoin("comments", "articles.article_id", "comments.article_id")
-      .orderBy(sort_by, order)
-      .groupBy("articles.article_id")
-      .count("comments.comment_id as comment_count")
       .then(articles => {
         if (articles.length === 0) {
-          let message = "Invalid query value)";
+          let message = "Invalid query value";
+
           if (query.article_id)
             message = `article_id ${query.article_id} not found`;
           if (query.topic) message = `topic '${query.topic}' not found`;

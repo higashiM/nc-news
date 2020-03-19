@@ -63,9 +63,13 @@ exports.addCommentToArticle = (comment, article_id) => {
 };
 
 exports.fetchCommentsFromArticle = (article_id, query) => {
+  const limit = query.limit || 10;
+  const offset = (query.p - 1) * limit || 0;
   return client("comments")
     .select("*")
     .where("article_id", "=", article_id)
+    .limit(limit)
+    .offset(offset)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
     .then(comments => comments);
 };
