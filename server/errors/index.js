@@ -13,7 +13,9 @@ exports.psqlErrors = (err, req, res, next) => {
       status: 422,
       message: "request field can not be processed"
     },
-    "22P02": { status: 400, message: "invalid user input" }
+    "23505": { status: 422, message: "request field can not be processed" },
+    "22P02": { status: 400, message: "invalid user input" },
+    "23502": { status: 400, message: "invalid user input" }
   };
 
   if (psqlCodes[err.code]) {
@@ -25,6 +27,5 @@ exports.psqlErrors = (err, req, res, next) => {
 };
 
 exports.otherErrors = (err, req, res, next) => {
-  console.log(err);
   res.status(500);
 };

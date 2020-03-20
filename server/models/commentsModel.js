@@ -3,8 +3,8 @@ const client = require("../../db/connection");
 exports.updateCommentVote = (comment_id, voteValue) => {
   if (!voteValue)
     return Promise.reject({
-      status: 422,
-      message: "request field can not be processed"
+      status: 400,
+      message: "required fields not provided"
     });
   return client("comments")
     .where("comment_id", "=", comment_id)
@@ -38,8 +38,8 @@ exports.removeComment = comment_id => {
 exports.addCommentToArticle = (comment, article_id) => {
   if (!comment.body || !comment.username) {
     return Promise.reject({
-      status: 422,
-      message: "request field can not be processed"
+      status: 400,
+      message: "required fields not provided"
     });
   }
 
@@ -71,5 +71,12 @@ exports.fetchCommentsFromArticle = (article_id, query) => {
     .limit(limit)
     .offset(offset)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .then(comments => comments);
+};
+
+exports.removeAllCommentsFromArticle = article_id => {
+  return client("comments")
+    .del()
+    .where("article_id", "=", article_id)
     .then(comments => comments);
 };

@@ -1,7 +1,20 @@
 const {
   fetchArticles,
-  incrementArticleVote
+  incrementArticleVote,
+  addOneArticle,
+  removeOneArticle
 } = require("../models/articlesModel");
+
+const { removeAllCommentsFromArticle } = require("../models/commentsModel");
+
+exports.postArticle = (req, res, next) => {
+  addOneArticle(req.body)
+    .then(articles => {
+      let article = articles[0];
+      res.status(201).send({ article });
+    })
+    .catch(next);
+};
 
 exports.getArticles = (req, res, next) => {
   return Promise.all([
@@ -16,7 +29,7 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.getArticle_id = (req, res, next) => {
-  fetchArticles(req.params)
+  fetchArticles(req.params, { countOnly: false })
     .then(articles => {
       const article = articles[0];
       res.status(200).send({ article });
@@ -28,6 +41,17 @@ exports.patchArticle_id = (req, res, next) => {
     .then(articles => {
       const article = articles[0];
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.deleteArticle_id = (req, res, next) => {
+  return removeAllCommentsFromArticle(req.params.article_id)
+    .then(comments => {
+      return removeOneArticle(req.params.article_id);
+    })
+    .then(article => {
+      res.status(204).send();
     })
     .catch(next);
 };

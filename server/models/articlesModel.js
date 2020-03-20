@@ -1,10 +1,41 @@
 const client = require("../../db/connection");
 
+exports.addOneArticle = article => {
+  if (!article.body || !article.author || !article.body || !article.topic) {
+    return Promise.reject({
+      status: 400,
+      message: "required fields not provided"
+    });
+  }
+
+  return client("articles")
+    .insert(article)
+    .returning("*")
+    .then(articles => {
+      return articles;
+    });
+};
+
+exports.removeOneArticle = article_id => {
+  return client("articles")
+    .del()
+    .where("article_id", "=", article_id)
+    .returning("*")
+    .then(articles => {
+      if (articles.length === 0) {
+        return Promise.reject({
+          status: 404,
+          message: `article_id ${article_id} not found`
+        });
+      } else return articles;
+    });
+};
+
 exports.incrementArticleVote = (query, voteValue) => {
   if (!voteValue)
     return Promise.reject({
-      status: 422,
-      message: "request field can not be processed"
+      status: 400,
+      message: "required fields not provided"
     });
 
   return client("articles")
@@ -42,8 +73,8 @@ exports.fetchArticles = (query, countOption) => {
   for (let i = 0; i < queryFields.length; i++) {
     if (allowedQueryFields.includes(queryFields[i]) === false) {
       return Promise.reject({
-        status: 422,
-        message: "query field can not be processed"
+        status: 400,
+        message: "required fields not provided"
       });
     }
   }
