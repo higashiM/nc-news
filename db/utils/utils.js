@@ -1,5 +1,5 @@
 const moment = require("moment");
-
+const bcrypt = require("bcrypt");
 exports.formatDates = list => {
   return list.map(item => {
     let newItem = {
@@ -19,6 +19,15 @@ exports.makeRefObj = (list, key, value) => {
     lookUpObj[item[key]] = item[value];
   });
   return lookUpObj;
+};
+
+exports.encryptPasswords = users => {
+  return users.map(user => {
+    return (newUser = {
+      ...user,
+      password: bcrypt.hashSync(user.password, 1)
+    });
+  });
 };
 
 exports.formatComments = (comments, articleRef) => {

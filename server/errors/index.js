@@ -28,4 +28,5 @@ exports.psqlErrors = (err, req, res, next) => {
 
 exports.otherErrors = (err, req, res, next) => {
   res.status(500);
+  console.log(err);
 };

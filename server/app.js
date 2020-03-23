@@ -3,9 +3,15 @@ const app = express();
 const { customErrors, psqlErrors, otherErrors } = require("./errors/index");
 const { logger } = require("./logger/logger");
 const apiRouter = require("./routers/apiRouter");
+const { validateUser } = require("../server/controllers/loginController");
+const loginRouter = require("./routers/loginRouter");
 
 app.use(express.json());
+
+app.use("/api/login", loginRouter);
+app.use(validateUser);
 app.use("/api", apiRouter);
+
 app.get("/", (req, res, next) => res.redirect("/api"));
 app.all("/*", (req, res, next) =>
   next({ status: 404, message: "404: File Not Found" })

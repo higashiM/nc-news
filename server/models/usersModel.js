@@ -1,4 +1,5 @@
 const client = require("../../db/connection");
+const bcrypt = require("bcrypt");
 
 exports.fetchUsers = username => {
   return client("users")
@@ -12,8 +13,10 @@ exports.fetchUsers = username => {
 };
 
 exports.addUser = user => {
+  const newUser = { ...user, password: bcrypt.hashSync(user.password, 10) };
+
   return client("users")
-    .insert(user)
+    .insert(newUser)
     .returning("*")
     .then(user => {
       return user;

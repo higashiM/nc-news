@@ -1,12 +1,17 @@
 fs = require("fs");
 
 exports.logger = (err, req, res, next) => {
+  const { username, password } = req.body;
+
+  const { method, URL, params, query, body } = req;
+  /* 
+  let method = req.method;
   let URL = req.originalUrl;
   let params = req.params;
   let query = req.query;
-  let body = req.body;
+  let body = req.body; */
 
-  let request = { URL, params, query, body };
+  const request = { method, URL, params, query, body };
   let error = err;
 
   log = { timestamp: new Date(), request, error };
