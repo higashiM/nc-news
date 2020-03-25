@@ -40,13 +40,21 @@ exports.postUser = (req, res, next) => {
 
 exports.validateUser = (req, res, next) => {
   const { authorization } = req.headers;
-  const token = authorization.split(" ")[1];
-  jwt.verify(token, JWT_SECRET, (err, payload) => {
-    if (err) {
-      next({ status: 401, message: "UNAUTHORIZED!!" });
-    } else {
-      req.user = payload;
-      next();
-    }
-  });
+
+  if (!authorization) {
+    return Promise.reject({
+      status: 401,
+      message: "Please login"
+    }).catch(next);
+  } else {
+    const token = authorization.split(" ")[1];
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+      if (err) {
+        next({ status: 401, message: "UNAUTHORIZED!!" });
+      } else {
+        req.user = payload;
+        next();
+      }
+    });
+  }
 };

@@ -644,3 +644,112 @@
 {"timestamp":"2020-03-23T20:43:32.954Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"username","avatar_url":"avatar_url","password":"password"}},"error":{"name":"error","length":254,"severity":"ERROR","code":"23502","detail":"Failing row contains (username, avatar_url, null, $2b$10$/TA52GIPhakQuEKEMGohsO1aVz.acr8nm4odiGzxdJIB72OKnuBoK).","schema":"public","table":"users","column":"name","file":"execMain.c","line":"2028","routine":"ExecConstraints"}}
 {"timestamp":"2020-03-23T20:43:33.471Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","avatar_url":"avatar_url","name":"roger sop","password":"password"}},"error":{"name":"error","length":193,"severity":"ERROR","code":"23505","detail":"Key (username)=(rogersop) already exists.","schema":"public","table":"users","constraint":"users_pkey","file":"nbtinsert.c","line":"527","routine":"_bt_check_unique"}}
 {"timestamp":"2020-03-23T20:43:34.290Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":404,"message":"username not found"}}
+{"timestamp":"2020-03-25T11:11:58.111Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:12:06.466Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:12:14.045Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:13:37.194Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:17:54.837Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"Please login"}}
+{"timestamp":"2020-03-25T11:18:32.377Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"Please login"}}
+{"timestamp":"2020-03-25T11:18:46.747Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:18:50.340Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:19:03.658Z","request":{"method":"GET","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"Please login"}}
+{"timestamp":"2020-03-25T11:19:14.635Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:19:39.557Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:19:40.556Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:19:41.346Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:20:32.189Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:33.142Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"not_a_password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:20:33.592Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersops","password":"not_a_password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:20:34.051Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:34.517Z","request":{"method":"GET","params":{},"query":{"limit":"10","sort_by":"votes","order":"asc"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:34.966Z","request":{"method":"GET","params":{},"query":{"p":"2"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:35.348Z","request":{"method":"GET","params":{},"query":{"p":"3","limit":"4"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:35.727Z","request":{"method":"GET","params":{},"query":{"p":"99999"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:36.195Z","request":{"method":"GET","params":{},"query":{"sort_by":"votes","order":"asc"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:36.785Z","request":{"method":"GET","params":{},"query":{"author":"rogersop"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:37.330Z","request":{"method":"GET","params":{},"query":{"topic":"cats"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:37.889Z","request":{"method":"GET","params":{},"query":{"author":"cats"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:38.429Z","request":{"method":"GET","params":{},"query":{"article_topic":"cats"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:38.919Z","request":{"method":"POST","params":{},"query":{},"body":{"author":"rogersop","title":"eating catfood to stay alive","body":"the last tins left on the asda shelf....","topic":"cats"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:39.302Z","request":{"method":"POST","params":{},"query":{},"body":{"author_name":"rogersop","title":"eating catfood to stay alive","body":"the last tins left on the asda shelf....","topic":"cats"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:39.824Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:40.259Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:40.761Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:41.156Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:41.656Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":-50}},"error":{}}
+{"timestamp":"2020-03-25T11:20:42.138Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":"loadsavotes"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:42.532Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:42.956Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:43.549Z","request":{"method":"PATCH","params":{},"query":{},"body":{"add_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:44.091Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:44.589Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:45.100Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"lurker","body":"soooooooo eye gougingly BORING!!"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:45.478Z","request":{"method":"POST","params":{},"query":{},"body":{"comments_username":"lurker","body":"soooooooo eye gougingly BORING!!"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:46.049Z","request":{"method":"POST","params":{},"query":{},"body":{"comments_username":"lurker","body":null}},"error":{}}
+{"timestamp":"2020-03-25T11:20:46.562Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"lurkers","body":"soooooooo eye gougingly BORING!!"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:47.072Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:47.514Z","request":{"method":"GET","params":{},"query":{"sort_by":"votes","order":"asc"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:47.965Z","request":{"method":"GET","params":{},"query":{"sort_by":"not_a_column","order":"asc"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:48.400Z","request":{"method":"GET","params":{},"query":{"sort_by":"votes","order":"asc"},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:48.800Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:49.167Z","request":{"method":"PUT","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:49.168Z","request":{"method":"PATCH","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:49.588Z","request":{"method":"POST","params":{},"query":{},"body":{"slug":"slug","description":"description"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:50.167Z","request":{"method":"POST","params":{},"query":{},"body":{"slug":"slug"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:50.730Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":84}},"error":{}}
+{"timestamp":"2020-03-25T11:20:51.234Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":"loadsavotes"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:51.702Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:52.141Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{}}
+{"timestamp":"2020-03-25T11:20:52.751Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:53.336Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:53.737Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:54.176Z","request":{"method":"PUT","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:54.177Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:54.570Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:55.033Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:55.473Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:55.981Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"username","avatar_url":"avatar_url","name":"name","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:56.464Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"username","avatar_url":"avatar_url","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:56.954Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","avatar_url":"avatar_url","name":"roger sop","password":"password"}},"error":{}}
+{"timestamp":"2020-03-25T11:20:57.494Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:57.977Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:58.515Z","request":{"method":"PUT","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:20:58.516Z","request":{"method":"PATCH","params":{},"query":{},"body":{}},"error":{}}
+{"timestamp":"2020-03-25T11:21:30.428Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"not_a_password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:21:30.819Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersops","password":"not_a_password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:21:32.925Z","request":{"method":"GET","params":{},"query":{"p":"99999"},"body":{}},"error":{"status":404,"message":"Invalid query value"}}
+{"timestamp":"2020-03-25T11:21:34.793Z","request":{"method":"GET","params":{},"query":{"author":"cats"},"body":{}},"error":{"status":404,"message":"author 'cats' not found"}}
+{"timestamp":"2020-03-25T11:21:35.368Z","request":{"method":"GET","params":{},"query":{"article_topic":"cats"},"body":{}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:36.341Z","request":{"method":"POST","params":{},"query":{},"body":{"author_name":"rogersop","title":"eating catfood to stay alive","body":"the last tins left on the asda shelf....","topic":"cats"}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:37.292Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":404,"message":"article_id 99999 not found"}}
+{"timestamp":"2020-03-25T11:21:37.917Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"name":"error","length":103,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:39.224Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":"loadsavotes"}},"error":{"name":"error","length":92,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:39.627Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{"name":"error","length":103,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:40.078Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{"status":404,"message":"article_id 99999 not found"}}
+{"timestamp":"2020-03-25T11:21:40.663Z","request":{"method":"PATCH","params":{},"query":{},"body":{"add_votes":1}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:41.090Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":404,"message":"article_id 1 not found"}}
+{"timestamp":"2020-03-25T11:21:41.571Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{"status":404,"message":"article_id 99999 not found"}}
+{"timestamp":"2020-03-25T11:21:42.570Z","request":{"method":"POST","params":{},"query":{},"body":{"comments_username":"lurker","body":"soooooooo eye gougingly BORING!!"}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:43.064Z","request":{"method":"POST","params":{},"query":{},"body":{"comments_username":"lurker","body":null}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:43.450Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"lurkers","body":"soooooooo eye gougingly BORING!!"}},"error":{"name":"error","length":263,"severity":"ERROR","code":"23503","detail":"Key (author)=(lurkers) is not present in table \"users\".","schema":"public","table":"comments","constraint":"comments_author_foreign","file":"ri_triggers.c","line":"2772","routine":"ri_ReportViolation"}}
+{"timestamp":"2020-03-25T11:21:44.911Z","request":{"method":"GET","params":{},"query":{"sort_by":"not_a_column","order":"asc"},"body":{}},"error":{"name":"error","length":112,"severity":"ERROR","code":"42703","position":"59","file":"parse_relation.c","line":"3284","routine":"errorMissingColumn"}}
+{"timestamp":"2020-03-25T11:21:45.314Z","request":{"method":"GET","params":{},"query":{"sort_by":"votes","order":"asc"},"body":{}},"error":{"status":404,"message":"article_id 999999 not found"}}
+{"timestamp":"2020-03-25T11:21:47.108Z","request":{"method":"POST","params":{},"query":{},"body":{"slug":"slug"}},"error":{"status":400,"message":"required fields not provided"}}
+{"timestamp":"2020-03-25T11:21:48.085Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":"loadsavotes"}},"error":{"name":"error","length":92,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:48.479Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{"name":"error","length":103,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:48.862Z","request":{"method":"PATCH","params":{},"query":{},"body":{"inc_votes":1}},"error":{"status":404,"message":"comment_id 99999 not found"}}
+{"timestamp":"2020-03-25T11:21:49.828Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{"status":404,"message":"comment_id 99999 not found"}}
+{"timestamp":"2020-03-25T11:21:50.338Z","request":{"method":"DELETE","params":{},"query":{},"body":{}},"error":{"name":"error","length":103,"severity":"ERROR","code":"22P02","file":"numutils.c","line":"59","routine":"pg_atoi"}}
+{"timestamp":"2020-03-25T11:21:53.214Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"username","avatar_url":"avatar_url","password":"password"}},"error":{"name":"error","length":254,"severity":"ERROR","code":"23502","detail":"Failing row contains (username, avatar_url, null, $2b$10$XARBOTtpZyMCZwZKBo7Ix.U6KA97p6zK0bP2qmT3DGj.F8.faFASK).","schema":"public","table":"users","column":"name","file":"execMain.c","line":"2028","routine":"ExecConstraints"}}
+{"timestamp":"2020-03-25T11:21:53.726Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","avatar_url":"avatar_url","name":"roger sop","password":"password"}},"error":{"name":"error","length":193,"severity":"ERROR","code":"23505","detail":"Key (username)=(rogersop) already exists.","schema":"public","table":"users","constraint":"users_pkey","file":"nbtinsert.c","line":"527","routine":"_bt_check_unique"}}
+{"timestamp":"2020-03-25T11:21:54.473Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":404,"message":"username not found"}}
+{"timestamp":"2020-03-25T11:22:16.319Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:25:06.769Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:25:30.450Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:25:31.098Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:25:31.582Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:25:31.895Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:26:10.356Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:26:11.079Z","request":{"method":"POST","params":{},"query":{},"body":{"username":"rogersop","password":"password"}},"error":{"status":401,"message":"invalid username or password"}}
+{"timestamp":"2020-03-25T11:27:31.114Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":401,"message":"UNAUTHORIZED!!"}}
+{"timestamp":"2020-03-25T11:27:56.601Z","request":{"method":"GET","params":{},"query":{},"body":{}},"error":{"status":401,"message":"UNAUTHORIZED!!"}}
