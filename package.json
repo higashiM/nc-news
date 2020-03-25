@@ -4,7 +4,7 @@
   "description": "bc-nc-news",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon listen.js",
+    "start": "node listen.js",
     "setup": "psql -f ./db/setup.sql && npx knex seed:run",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "knex seed:run",
