@@ -21,19 +21,8 @@ describe("/api", () => {
   after(() => {
     client.destroy();
   });
-  let validToken;
   beforeEach(() => {
-    return client.seed
-      .run()
-      .then(() => {
-        return request
-          .post("/api/login")
-          .expect(200)
-          .send({ username: "rogersop", password: "password" });
-      })
-      .then(({ body: { token } }) => {
-        request.set("authorization", `BEARER ${token}`);
-      });
+    return client.seed.run();
   });
 
   it("GET response returns a JSON object describing the paths", () => {
@@ -72,6 +61,38 @@ describe("/api", () => {
         .expect(401)
         .then(res => {
           expect(res.body.message).to.equal("invalid username or password");
+        });
+    });
+  });
+  describe("/secure", () => {
+    beforeEach(() => {
+      return request
+        .post("/api/login")
+        .expect(200)
+        .send({ username: "rogersop", password: "password" })
+        .then(({ body: { token } }) => {
+          request.set("authorization", `BEARER ${token}`);
+        });
+    });
+
+    it("Get request with authorization returns a welcome meesage", () => {
+      return request
+        .get("/api/secure")
+        .expect(200)
+        .then(res => {
+          expect(res.body.message).to.equal("welcome to the secure area");
+        });
+    });
+
+    it("Get request with authorization returns an unauthorised message", () => {
+      return request
+        .set("authorization", ``)
+        .get("/api/secure")
+        .expect(401)
+        .then(res => {
+          expect(res.body.message).to.equal(
+            "UNAUTHORIZED this is a secure area!! Please login"
+          );
         });
     });
   });

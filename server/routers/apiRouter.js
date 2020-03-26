@@ -3,6 +3,8 @@ const articlesRouter = require("./articlesRouter");
 const commentsRouter = require("./commentsRouter");
 const topicsRouter = require("./topicsRouter");
 const usersRouter = require("./usersRouter");
+const secureRouter = require("./secureRouter");
+const loginRouter = require("./loginRouter");
 
 const { getEndPoints } = require("../controllers/apiController");
 
@@ -10,6 +12,8 @@ apiRouter.use("/articles", articlesRouter);
 apiRouter.use("/comments", commentsRouter);
 apiRouter.use("/topics", topicsRouter);
 apiRouter.use("/users", usersRouter);
+apiRouter.use("/secure", secureRouter);
+apiRouter.use("/login", loginRouter);
 
 apiRouter
   .route("/")

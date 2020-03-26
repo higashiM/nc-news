@@ -44,7 +44,7 @@ exports.validateUser = (req, res, next) => {
   if (!authorization) {
     return Promise.reject({
       status: 401,
-      message: "Please login"
+      message: "UNAUTHORIZED this is a secure area!! Please login"
     }).catch(next);
   } else {
     const token = authorization.split(" ")[1];
