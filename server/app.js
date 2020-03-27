@@ -5,7 +5,7 @@ const { logger } = require("./logger/logger");
 const apiRouter = require("./routers/apiRouter");
 const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
 const bodyParser = require("body-parser");
-const { makeExecutableSchema } = require("graphql-tools");
+const { schema } = require("./graphql/index");
 
 app.use(express.json());
 
@@ -20,22 +20,19 @@ const books = [
   }
 ];
 
-// The GraphQL schema in string form
+/* // The GraphQL schema in string form
 const typeDefs = `
   type Query { books: [Book] }
   type Book { title: String, author: String }
-`;
+`; */
 
 // The resolvers
-const resolvers = {
+/* const resolvers = {
   Query: { books: () => books }
-};
+}; */
 
 // Put together a schema
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers
-});
+
 app.use("/graphql", bodyParser.json(), graphqlExpress({ schema }));
 app.use("/graphiql", graphiqlExpress({ endpointURL: "/graphql" }));
 

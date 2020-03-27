@@ -252,8 +252,7 @@ describe("/api", () => {
               "body",
               "topic",
               "created_at",
-              "votes",
-              "comment_count"
+              "votes"
             );
           });
       });

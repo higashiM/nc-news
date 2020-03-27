@@ -1,11 +1,6 @@
 const client = require("../../db/connection");
 
 exports.updateCommentVote = (comment_id, voteValue) => {
-  if (!voteValue)
-    return Promise.reject({
-      status: 400,
-      message: "required fields not provided"
-    });
   return client("comments")
     .where("comment_id", "=", comment_id)
     .increment("votes", voteValue)
@@ -36,13 +31,6 @@ exports.removeComment = comment_id => {
 };
 
 exports.addCommentToArticle = (comment, article_id) => {
-  if (!comment.body || !comment.username) {
-    return Promise.reject({
-      status: 400,
-      message: "required fields not provided"
-    });
-  }
-
   const newComment = {
     body: comment.body,
     author: comment.username,
@@ -62,7 +50,7 @@ exports.addCommentToArticle = (comment, article_id) => {
     });
 };
 
-exports.fetchCommentsFromArticle = (article_id, query) => {
+exports.fetchCommentsFromArticleWithQuery = (article_id, query) => {
   const limit = query.limit || 10;
   const offset = (query.p - 1) * limit || 0;
   return client("comments")
@@ -71,6 +59,15 @@ exports.fetchCommentsFromArticle = (article_id, query) => {
     .limit(limit)
     .offset(offset)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
+    .then(comments => comments);
+};
+
+exports.fetchAllCommentsfromArticle = article_id => {
+  return client("comments")
+    .select("*")
+    .modify(query => {
+      if (article_id) query.where({ article_id });
+    })
     .then(comments => comments);
 };
 

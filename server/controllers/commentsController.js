@@ -2,12 +2,20 @@ const {
   updateCommentVote,
   removeComment,
   addCommentToArticle,
-  fetchCommentsFromArticle
+  fetchCommentsFromArticleWithQuery
 } = require("../models/commentsModel");
-const { checkOneArticle } = require("../models/articlesModel");
+const { fetchOneArticle } = require("../models/articlesModel");
 
 exports.patchComment = (req, res, next) => {
-  updateCommentVote(req.params.comment_id, req.body.inc_votes)
+  const comment_id = req.params.comment_id;
+  const voteValue = req.body.inc_votes;
+  if (!voteValue)
+    return Promise.reject({
+      status: 400,
+      message: "required fields not provided"
+    }).catch(next);
+
+  updateCommentVote(comment_id, voteValue)
     .then(comments => {
       const comment = comments[0];
 
@@ -24,7 +32,17 @@ exports.deleteComment = (req, res, next) => {
     .catch(next);
 };
 exports.postArticleComments = (req, res, next) => {
-  addCommentToArticle(req.body, req.params.article_id)
+  const comment = req.body;
+  const article_id = req.params.article_id;
+
+  if (!comment.body || !comment.username) {
+    return Promise.reject({
+      status: 400,
+      message: "required fields not provided"
+    }).catch(next);
+  }
+
+  addCommentToArticle(comment, article_id)
     .then(comments => {
       const comment = comments[0];
       res.status(201).send({ comment });
@@ -36,8 +54,8 @@ exports.getArticleComments = (req, res, next) => {
   const article_id = req.params.article_id;
 
   return Promise.all([
-    fetchCommentsFromArticle(article_id, req.query),
-    checkOneArticle(article_id)
+    fetchCommentsFromArticleWithQuery(article_id, req.query),
+    fetchOneArticle(article_id)
   ])
     .then(([comments, article]) => {
       if (comments.length === 0 && !article) {

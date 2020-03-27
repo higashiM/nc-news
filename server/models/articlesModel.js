@@ -1,13 +1,6 @@
 const client = require("../../db/connection");
 
 exports.addOneArticle = article => {
-  if (!article.body || !article.author || !article.body || !article.topic) {
-    return Promise.reject({
-      status: 400,
-      message: "required fields not provided"
-    });
-  }
-
   return client("articles")
     .insert(article)
     .returning("*")
@@ -22,6 +15,16 @@ exports.removeOneArticle = article_id => {
     .where("article_id", "=", article_id)
     .returning("*")
     .then(articles => {
+      return articles;
+    });
+};
+
+exports.incrementArticleVote = (article_id, voteValue) => {
+  return client("articles")
+    .where("article_id", "=", article_id)
+    .increment("votes", voteValue)
+    .returning("*")
+    .then(articles => {
       if (articles.length === 0) {
         return Promise.reject({
           status: 404,
@@ -30,35 +33,25 @@ exports.removeOneArticle = article_id => {
       } else return articles;
     });
 };
-
-exports.incrementArticleVote = (query, voteValue) => {
-  if (!voteValue)
-    return Promise.reject({
-      status: 400,
-      message: "required fields not provided"
-    });
-
-  return client("articles")
-    .where("article_id", "=", query.article_id)
-    .increment("votes", voteValue)
-    .returning("*")
-    .then(articles => {
-      if (articles.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: `article_id ${query.article_id} not found`
-        });
-      } else return articles;
-    });
-};
-exports.checkOneArticle = article_id => {
+exports.fetchOneArticle = article_id => {
   return client("articles")
     .first("*")
     .where("articles.article_id", "=", article_id)
-    .then(articles => articles);
+    .then(articles => {
+      return articles;
+    });
 };
-exports.fetchArticles = (query, countOption) => {
+
+exports.fetchAllArticles = author => {
+  return client("articles")
+    .select("*")
+    .modify(query => {
+      if (author) query.where({ author });
+    });
+};
+exports.fetchArticlesWithQuery = (query, countOption) => {
   const countOnly = countOption.countOnly;
+
   const allowedQueryFields = [
     "author",
     "topic",
@@ -123,19 +116,7 @@ exports.fetchArticles = (query, countOption) => {
         if (query.topic) queryBuilder.where("articles.topic", "=", query.topic);
       })
       .then(articles => {
-        if (articles.length === 0) {
-          let message = "Invalid query value";
-
-          if (query.article_id)
-            message = `article_id ${query.article_id} not found`;
-          if (query.topic) message = `topic '${query.topic}' not found`;
-          if (query.author) message = `author '${query.author}' not found`;
-
-          return Promise.reject({
-            status: 404,
-            message: message
-          });
-        } else return articles;
+        return articles;
       })
   );
 };
