@@ -10,10 +10,5 @@ exports.queryDefs = gql`
     article(article_id: ID!): Article!
     comment(comment_id: ID!): Comment!
     comments: Comment!
-
   }
-""" extend type Query {
-
-  listTopics(filter: topicfilterinput, limit: Int, nextToken: string)
-} """
 `;
