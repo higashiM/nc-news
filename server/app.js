@@ -6,6 +6,8 @@ const apiRouter = require("./routers/apiRouter");
 const { graphqlExpress, graphiqlExpress } = require("apollo-server-express");
 const bodyParser = require("body-parser");
 const { schema } = require("../db/graphql/schema/index");
+const cors = require("cors");
+app.use(cors());
 
 app.use(express.json());
 
