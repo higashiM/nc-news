@@ -1,11 +1,3 @@
-// The GraphQL schema in string form
-/* const typeDefs = `
-  type Query { books: [Book] }
-  type Book { title: String, author: String }
-
-  
-`; */
-
 const gql = require("graphql-tag");
 
 exports.typeDefs = gql`
@@ -17,6 +9,11 @@ exports.typeDefs = gql`
     articles: [Article]
   }
 
+  type Topic {
+    slug: String
+    description: String
+    articles: [Article]
+  }
   type Article {
     article_id: ID
     title: String
@@ -30,7 +27,7 @@ exports.typeDefs = gql`
 
   type Comment {
     comment_id: ID
-    author: String
+    author: User
     article_id: ID
     votes: Int
     created_at: String
@@ -38,18 +35,9 @@ exports.typeDefs = gql`
     article: Article
   }
 
-  type Topic {
-    slug: String
-    description: String
-  }
-
-  type Query {
-    users: [User]
-    user(username: ID!): User!
-    articles: [Article]
-    article(article_id: ID!): Article!
-    comment(comment_id: ID!): Comment!
-    comments: Comment!
-    topics: [Topic]
+  input NewComment {
+    author: String!
+    body: String!
+    article_id: Int
   }
 `;
