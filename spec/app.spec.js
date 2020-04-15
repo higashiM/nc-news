@@ -11,7 +11,7 @@ chai.use(chaiSorted);
 const satisfyAll = (array, key, value) => {
   //used to check key '===' value for all objects in an array
   let condition = true;
-  array.forEach(items => {
+  array.forEach((items) => {
     if (items[key] !== value) condition = false;
   });
   return condition;
@@ -29,7 +29,7 @@ describe("/api", () => {
     return request
       .get("/api")
       .expect(200)
-      .then(res => expect(res.body.endPoints).to.be.a("object"));
+      .then((res) => expect(res.body.endPoints).to.be.a("object"));
   });
 
   describe("/login", () => {
@@ -39,7 +39,7 @@ describe("/api", () => {
         .set("authorization", ``)
         .send({ username: "rogersop", password: "password" })
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.token);
         });
     });
@@ -49,7 +49,7 @@ describe("/api", () => {
         .set("authorization", ``)
         .send({ username: "rogersop", password: "not_a_password" })
         .expect(401)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("invalid username or password");
         });
     });
@@ -59,7 +59,7 @@ describe("/api", () => {
         .set("authorization", ``)
         .send({ username: "rogersops", password: "not_a_password" })
         .expect(401)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("invalid username or password");
         });
     });
@@ -79,7 +79,7 @@ describe("/api", () => {
       return request
         .get("/api/secure")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("welcome to the secure area");
         });
     });
@@ -89,7 +89,7 @@ describe("/api", () => {
         .set("authorization", ``)
         .get("/api/secure")
         .expect(401)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal(
             "UNAUTHORIZED this is a secure area!! Please login"
           );
@@ -102,10 +102,11 @@ describe("/api", () => {
       return request
         .get("/api/articles/")
         .expect(200)
-        .then(res => {
+        .then((res) => {
+          console.log(res.body.articles);
           expect(res.body.articles).to.be.a("array");
           expect(res.body.articles).to.be.sortedBy("created_at", {
-            descending: true
+            descending: true,
           });
           expect(res.body.articles[0]).to.contain.keys(
             "author",
@@ -124,7 +125,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?limit=10&sort_by=votes&order=asc")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(Number(res.body.total_count)).to.equal(12);
           expect(res.body.articles.length).to.equal(10);
         });
@@ -133,7 +134,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?p=2")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(Number(res.body.total_count)).to.equal(12);
           expect(res.body.articles.length).to.equal(2);
         });
@@ -142,7 +143,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?p=3&limit=4")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(Number(res.body.total_count)).to.equal(12);
           expect(res.body.articles.length).to.equal(4);
         });
@@ -151,7 +152,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?p=99999")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("Invalid query value");
         });
     });
@@ -160,9 +161,9 @@ describe("/api", () => {
       return request
         .get("/api/articles?sort_by=votes&order=asc")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.articles).to.be.sortedBy("votes", {
-            ascending: true
+            ascending: true,
           });
         });
     });
@@ -170,8 +171,8 @@ describe("/api", () => {
       return request
         .get("/api/articles?author=rogersop")
         .expect(200)
-        .then(res => {
-          expect(res.body.articles).to.satisfy(function(articles) {
+        .then((res) => {
+          expect(res.body.articles).to.satisfy(function (articles) {
             return satisfyAll(articles, "author", "rogersop");
           });
         });
@@ -180,8 +181,8 @@ describe("/api", () => {
       return request
         .get("/api/articles?topic=cats")
         .expect(200)
-        .then(res => {
-          expect(res.body.articles).to.satisfy(function(articles) {
+        .then((res) => {
+          expect(res.body.articles).to.satisfy(function (articles) {
             return satisfyAll(articles, "topic", "cats");
           });
         });
@@ -190,7 +191,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?author=cats")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("author 'cats' not found");
         });
     });
@@ -198,7 +199,7 @@ describe("/api", () => {
       return request
         .get("/api/articles?article_topic=cats")
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("required fields not provided");
         });
     });
@@ -209,10 +210,10 @@ describe("/api", () => {
           author: "rogersop",
           title: "eating catfood to stay alive",
           body: "the last tins left on the asda shelf....",
-          topic: "cats"
+          topic: "cats",
         })
         .expect(201)
-        .then(res => {
+        .then((res) => {
           expect(res.body.article).to.contain.keys(
             "author",
             "title",
@@ -231,10 +232,10 @@ describe("/api", () => {
           author_name: "rogersop",
           title: "eating catfood to stay alive",
           body: "the last tins left on the asda shelf....",
-          topic: "cats"
+          topic: "cats",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.equal("required fields not provided");
         });
     });
@@ -244,7 +245,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/1")
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.article).to.contain.keys(
               "author",
               "title",
@@ -260,7 +261,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/99999")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("article_id 99999 not found");
           });
       });
@@ -268,7 +269,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/not_a_valid_id")
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("invalid user input");
           });
       });
@@ -278,7 +279,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: 1 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.article).to.contain.keys(
               "author",
               "title",
@@ -296,7 +297,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: -50 })
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.article.votes).to.equal(50);
           });
       });
@@ -305,7 +306,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ inc_votes: "loadsavotes" })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("invalid user input");
           });
       });
@@ -314,7 +315,7 @@ describe("/api", () => {
           .patch("/api/articles/not_a_valid_id")
           .send({ inc_votes: 1 })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("invalid user input");
           });
       });
@@ -323,7 +324,7 @@ describe("/api", () => {
           .patch("/api/articles/99999")
           .send({ inc_votes: 1 })
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("article_id 99999 not found");
           });
       });
@@ -332,7 +333,7 @@ describe("/api", () => {
           .patch("/api/articles/1")
           .send({ add_votes: 1 })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("required fields not provided");
           });
       });
@@ -340,11 +341,11 @@ describe("/api", () => {
         return request
           .delete("/api/articles/1")
           .expect(204)
-          .then(res => {
+          .then((res) => {
             return request
               .get("/api/articles/1")
               .expect(404)
-              .then(res => {
+              .then((res) => {
                 expect(res.body.message).to.eql("article_id 1 not found");
               });
           });
@@ -353,7 +354,7 @@ describe("/api", () => {
         return request
           .delete("/api/articles/99999")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("article_id 99999 not found");
           });
       });
@@ -364,10 +365,10 @@ describe("/api", () => {
           .post("/api/articles/1/comments")
           .send({
             username: "lurker",
-            body: "soooooooo eye gougingly BORING!!"
+            body: "soooooooo eye gougingly BORING!!",
           })
           .expect(201)
-          .then(res => {
+          .then((res) => {
             expect(res.body.comment).to.contain.keys(
               "comment_id",
               "author",
@@ -383,10 +384,10 @@ describe("/api", () => {
           .post("/api/articles/1/comments")
           .send({
             comments_username: "lurker",
-            body: "soooooooo eye gougingly BORING!!"
+            body: "soooooooo eye gougingly BORING!!",
           })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("required fields not provided");
           });
       });
@@ -395,10 +396,10 @@ describe("/api", () => {
           .post("/api/articles/1/comments")
           .send({
             comments_username: "lurker",
-            body: null
+            body: null,
           })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("required fields not provided");
           });
       });
@@ -407,10 +408,10 @@ describe("/api", () => {
           .post("/api/articles/1/comments")
           .send({
             username: "lurkers",
-            body: "soooooooo eye gougingly BORING!!"
+            body: "soooooooo eye gougingly BORING!!",
           })
           .expect(422)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql(
               "request field can not be processed"
             );
@@ -421,7 +422,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/1/comments")
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.comments[0]).to.contain.keys(
               "comment_id",
               "author",
@@ -430,12 +431,12 @@ describe("/api", () => {
               "body",
               "votes"
             );
-            expect(res.body.comments).to.satisfy(function(comments) {
+            expect(res.body.comments).to.satisfy(function (comments) {
               return satisfyAll(comments, "article_id", 1);
             });
 
             expect(res.body.comments).to.be.sortedBy("created_at", {
-              descending: true
+              descending: true,
             });
           });
       });
@@ -443,9 +444,9 @@ describe("/api", () => {
         return request
           .get("/api/articles/1/comments?sort_by=votes&order=asc")
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body.comments).to.be.sortedBy("votes", {
-              ascending: true
+              ascending: true,
             });
           });
       });
@@ -453,7 +454,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/1/comments?sort_by=not_a_column&order=asc")
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.equal("invalid query value");
           });
       });
@@ -461,7 +462,7 @@ describe("/api", () => {
         return request
           .get("/api/articles/999999/comments?sort_by=votes&order=asc")
           .expect(404)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.equal("article_id 999999 not found");
           });
       });
@@ -472,7 +473,7 @@ describe("/api", () => {
         return request
           .get("/api/topics")
           .expect(200)
-          .then(res => {
+          .then((res) => {
             expect(res.body).to.contain.keys("topics");
             expect(res.body.topics).to.be.a("array");
             expect(res.body.topics[0]).to.contain.keys("slug", "description");
@@ -480,7 +481,7 @@ describe("/api", () => {
       });
       it("Non supported method request returns a 405", () => {
         const invalidMethods = ["put", "patch"];
-        const methodPromises = invalidMethods.map(method => {
+        const methodPromises = invalidMethods.map((method) => {
           return request[method]("/api/topics").expect(405);
         });
         return Promise.all(methodPromises);
@@ -490,10 +491,10 @@ describe("/api", () => {
           .post("/api/topics")
           .send({ slug: "slug", description: "description" })
           .expect(201)
-          .then(res => {
+          .then((res) => {
             expect(res.body.topic).to.eql({
               slug: "slug",
-              description: "description"
+              description: "description",
             });
           });
       });
@@ -502,7 +503,7 @@ describe("/api", () => {
           .post("/api/topics")
           .send({ slug: "slug" })
           .expect(400)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.eql("required fields not provided");
           });
       });
@@ -514,7 +515,7 @@ describe("/api", () => {
             .patch("/api/comments/1")
             .send({ inc_votes: 84 })
             .expect(200)
-            .then(res => {
+            .then((res) => {
               expect(res.body.comment.votes).to.equal(100);
               expect(res.body.comment).to.contain.keys(
                 "comment_id",
@@ -531,7 +532,7 @@ describe("/api", () => {
             .patch("/api/comments/1")
             .send({ inc_votes: "loadsavotes" })
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.message).to.eql("invalid user input");
             });
         });
@@ -540,7 +541,7 @@ describe("/api", () => {
             .patch("/api/comments/not_a_valid_id")
             .send({ inc_votes: 1 })
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.message).to.eql("invalid user input");
             });
         });
@@ -549,7 +550,7 @@ describe("/api", () => {
             .patch("/api/comments/99999")
             .send({ inc_votes: 1 })
             .expect(404)
-            .then(res => {
+            .then((res) => {
               expect(res.body.message).to.eql("comment_id 99999 not found");
             });
         });
@@ -557,13 +558,13 @@ describe("/api", () => {
           return request
             .delete("/api/comments/1")
             .expect(204)
-            .then(res => {});
+            .then((res) => {});
         });
         it("DELETE request responds with 404 when article id does not exist", () => {
           return request
             .delete("/api/comments/99999")
             .expect(404)
-            .then(res => {
+            .then((res) => {
               expect(res.body.message).to.eql("comment_id 99999 not found");
             });
         });
@@ -571,13 +572,13 @@ describe("/api", () => {
           return request
             .delete("/api/comments/not_a_valid_id")
             .expect(400)
-            .then(res => {
+            .then((res) => {
               expect(res.body.message).to.eql("invalid user input");
             });
         });
         it("Non supported method request returns a 405", () => {
           const invalidMethods = ["put", "get"];
-          const methodPromises = invalidMethods.map(method => {
+          const methodPromises = invalidMethods.map((method) => {
             return request[method]("/api/comments/1").expect(405);
           });
           return Promise.all(methodPromises);
@@ -589,7 +590,7 @@ describe("/api", () => {
         return request
           .get("/api/iamateapot")
           .expect(418)
-          .then(res => {
+          .then((res) => {
             expect(res.body.message).to.equal("we are all teapots");
           });
       });
@@ -600,7 +601,7 @@ describe("/api", () => {
         return request
           .get("/")
           .expect(302)
-          .then(res => expect(res.header.location).to.be.equal("/api"));
+          .then((res) => expect(res.header.location).to.be.equal("/api"));
       });
     });
   });
@@ -610,7 +611,7 @@ describe("/api", () => {
       return request
         .get("/api/users/")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.users[0]).to.contain.keys(
             "username",
             "avatar_url",
@@ -626,10 +627,10 @@ describe("/api", () => {
           username: "username",
           avatar_url: "avatar_url",
           name: "name",
-          password: "password"
+          password: "password",
         })
         .expect(201)
-        .then(res => {
+        .then((res) => {
           expect(res.body.user).to.contain.keys(
             "username",
             "avatar_url",
@@ -644,10 +645,10 @@ describe("/api", () => {
         .send({
           username: "username",
           avatar_url: "avatar_url",
-          password: "password"
+          password: "password",
         })
         .expect(400)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.eql("invalid user input");
         });
     });
@@ -658,10 +659,10 @@ describe("/api", () => {
           username: "rogersop",
           avatar_url: "avatar_url",
           name: "roger sop",
-          password: "password"
+          password: "password",
         })
         .expect(422)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.eql("request field can not be processed");
         });
     });
@@ -670,7 +671,7 @@ describe("/api", () => {
       return request
         .get("/api/users/lurker")
         .expect(200)
-        .then(res => {
+        .then((res) => {
           expect(res.body.user).to.contain.keys(
             "username",
             "avatar_url",
@@ -684,13 +685,13 @@ describe("/api", () => {
       return request
         .get("/api/users/not_a_real_user")
         .expect(404)
-        .then(res => {
+        .then((res) => {
           expect(res.body.message).to.eql("username not found");
         });
     });
     it("Non supported method request returns a 405", () => {
       const invalidMethods = ["put", "patch"];
-      const methodPromises = invalidMethods.map(method => {
+      const methodPromises = invalidMethods.map((method) => {
         return request[method]("/api/users/lurker").expect(405);
       });
       return Promise.all(methodPromises);
