@@ -360,7 +360,7 @@ describe("/api", () => {
       });
     });
     describe("/articles/:article_id/comments", () => {
-      it("POST request responds with 201 and posted comment", () => {
+      it.only("POST request responds with 201 and posted comment", () => {
         return request
           .post("/api/articles/1/comments")
           .send({
@@ -369,6 +369,7 @@ describe("/api", () => {
           })
           .expect(201)
           .then((res) => {
+            console.log(res.body.comment);
             expect(res.body.comment).to.contain.keys(
               "comment_id",
               "author",
