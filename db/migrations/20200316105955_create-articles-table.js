@@ -10,7 +10,7 @@ exports.up = function (knex) {
     articlesTable.text("body").notNullable();
     articlesTable.timestamp("created_at").default(new Date().toISOString());
     articlesTable.integer("votes").default(0);
-    articlesTable.string("image_url");
+    articlesTable.string("image_url").default("");
   });
 };
 
