@@ -103,7 +103,6 @@ describe("/api", () => {
         .get("/api/articles/")
         .expect(200)
         .then((res) => {
-          console.log(res.body.articles);
           expect(res.body.articles).to.be.a("array");
           expect(res.body.articles).to.be.sortedBy("created_at", {
             descending: true,
@@ -360,7 +359,7 @@ describe("/api", () => {
       });
     });
     describe("/articles/:article_id/comments", () => {
-      it.only("POST request responds with 201 and posted comment", () => {
+      it("POST request responds with 201 and posted comment", () => {
         return request
           .post("/api/articles/1/comments")
           .send({
@@ -369,7 +368,6 @@ describe("/api", () => {
           })
           .expect(201)
           .then((res) => {
-            console.log(res.body.comment);
             expect(res.body.comment).to.contain.keys(
               "comment_id",
               "author",
