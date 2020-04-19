@@ -32,8 +32,10 @@ exports.removeComment = (comment_id) => {
 
 exports.addCommentToArticle = (comment, article_id) => {
   const newComment = {
-    ...comment,
+    body: comment.body,
+    author: comment.username,
     article_id,
+    created_at: comment.created_at,
   };
 
   return client("comments")
