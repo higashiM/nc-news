@@ -5,26 +5,26 @@ exports.updateCommentVote = (comment_id, voteValue) => {
     .where("comment_id", "=", comment_id)
     .increment("votes", voteValue)
     .returning("*")
-    .then(comments => {
+    .then((comments) => {
       if (comments.length === 0) {
         return Promise.reject({
           status: 404,
-          message: `comment_id ${comment_id} not found`
+          message: `comment_id ${comment_id} not found`,
         });
       } else return comments;
     });
 };
 
-exports.removeComment = comment_id => {
+exports.removeComment = (comment_id) => {
   return client("comments")
     .del()
     .where("comment_id", "=", comment_id)
     .returning("*")
-    .then(comments => {
+    .then((comments) => {
       if (comments.length === 0) {
         return Promise.reject({
           status: 404,
-          message: `comment_id ${comment_id} not found`
+          message: `comment_id ${comment_id} not found`,
         });
       } else return comments;
     });
@@ -32,19 +32,18 @@ exports.removeComment = comment_id => {
 
 exports.addCommentToArticle = (comment, article_id) => {
   const newComment = {
-    body: comment.body,
-    author: comment.username,
-    article_id
+    ...comment,
+    article_id,
   };
 
   return client("comments")
     .insert(newComment)
     .returning("*")
-    .then(comments => {
+    .then((comments) => {
       if (comments.length === 0) {
         return Promise.reject({
           status: 404,
-          message: `article_id ${article_id} not found`
+          message: `article_id ${article_id} not found`,
         });
       } else return comments;
     });
@@ -59,21 +58,21 @@ exports.fetchCommentsFromArticleWithQuery = (article_id, query) => {
     .limit(limit)
     .offset(offset)
     .orderBy(query.sort_by || "created_at", query.order || "desc")
-    .then(comments => comments);
+    .then((comments) => comments);
 };
 
-exports.fetchAllCommentsfromArticle = article_id => {
+exports.fetchAllCommentsfromArticle = (article_id) => {
   return client("comments")
     .select("*")
-    .modify(query => {
+    .modify((query) => {
       if (article_id) query.where({ article_id });
     })
-    .then(comments => comments);
+    .then((comments) => comments);
 };
 
-exports.removeAllCommentsFromArticle = article_id => {
+exports.removeAllCommentsFromArticle = (article_id) => {
   return client("comments")
     .del()
     .where("article_id", "=", article_id)
-    .then(comments => comments);
+    .then((comments) => comments);
 };

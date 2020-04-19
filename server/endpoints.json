@@ -161,5 +161,12 @@
     "queries": [],
     "exampleRequest": {},
     "exampleResponse": {}
+  },
+
+  "POST /api/topics/": {
+    "description": "posts a new topic and returns the new article",
+    "queries": [],
+    "exampleRequest": { "slug": "slug", "description": "description" },
+    "exampleResponse": { "slug": "slug", "description": "description" }
   }
 }
