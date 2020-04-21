@@ -3,10 +3,8 @@ const {
   incrementArticleVote,
   addOneArticle,
   removeOneArticle,
-  fetchOneArticle
+  fetchOneArticle,
 } = require("../models/articlesModel");
-
-const { removeAllCommentsFromArticle } = require("../models/commentsModel");
 
 exports.postArticle = (req, res, next) => {
   const article = req.body;
@@ -14,11 +12,11 @@ exports.postArticle = (req, res, next) => {
   if (!article.body || !article.author || !article.title || !article.topic) {
     return Promise.reject({
       status: 400,
-      message: "required fields not provided"
+      message: "required fields not provided",
     }).catch(next);
   }
   addOneArticle(article)
-    .then(articles => {
+    .then((articles) => {
       let article = articles[0];
       res.status(201).send({ article });
     })
@@ -30,7 +28,7 @@ exports.getArticles = (req, res, next) => {
 
   return Promise.all([
     fetchArticlesWithQuery(query, { countOnly: false }),
-    fetchArticlesWithQuery(query, { countOnly: true })
+    fetchArticlesWithQuery(query, { countOnly: true }),
   ])
     .then(([articles, count]) => {
       if (articles.length === 0) {
@@ -43,7 +41,7 @@ exports.getArticles = (req, res, next) => {
 
         return Promise.reject({
           status: 404,
-          message: message
+          message: message,
         });
       } else {
         total_count = count.total_count;
@@ -57,13 +55,13 @@ exports.getArticle_id = (req, res, next) => {
   const article_id = req.params.article_id;
   console.log(article_id);
   fetchOneArticle(article_id)
-    .then(article => {
+    .then((article) => {
       if (!article) {
         message = `article_id ${article_id} not found`;
 
         return Promise.reject({
           status: 404,
-          message: message
+          message: message,
         });
       } else {
         res.status(200).send({ article });
@@ -78,11 +76,11 @@ exports.patchArticle_id = (req, res, next) => {
   if (!voteValue)
     return Promise.reject({
       status: 400,
-      message: "required fields not provided"
+      message: "required fields not provided",
     }).catch(next);
 
   incrementArticleVote(article_id, voteValue)
-    .then(articles => {
+    .then((articles) => {
       const article = articles[0];
       res.status(200).send({ article });
     })
@@ -91,16 +89,14 @@ exports.patchArticle_id = (req, res, next) => {
 
 exports.deleteArticle_id = (req, res, next) => {
   const article_id = req.params.article_id;
-  return removeAllCommentsFromArticle(article_id)
-    .then(comments => {
-      return removeOneArticle(article_id);
-    })
+
+  return removeOneArticle(article_id)
     .catch(next)
-    .then(article => {
+    .then((article) => {
       if (article.length === 0) {
         return Promise.reject({
           status: 404,
-          message: `article_id ${article_id} not found`
+          message: `article_id ${article_id} not found`,
         });
       } else {
         res.status(204).send();

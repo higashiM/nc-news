@@ -5,6 +5,7 @@ const topicsRouter = require("./topicsRouter");
 const usersRouter = require("./usersRouter");
 const secureRouter = require("./secureRouter");
 const loginRouter = require("./loginRouter");
+const votesRouter = require("./votesRouter");
 
 const { getEndPoints } = require("../controllers/apiController");
 
@@ -14,6 +15,7 @@ apiRouter.use("/topics", topicsRouter);
 apiRouter.use("/users", usersRouter);
 apiRouter.use("/secure", secureRouter);
 apiRouter.use("/login", loginRouter);
+apiRouter.use("/votes", votesRouter);
 
 apiRouter
   .route("/")

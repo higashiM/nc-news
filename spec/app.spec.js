@@ -696,4 +696,106 @@ describe("/api", () => {
       return Promise.all(methodPromises);
     });
   });
+
+  describe.only("/votes", () => {
+    describe("/votes/:username/articlevotes", () => {
+      it("Returns an array of article votes for a given user", () => {
+        return request
+          .get("/api/votes/lurker/articlevotes")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.votes).to.be.a("array");
+            console.log(res.body.votes);
+            expect(res.body.votes[0]).to.contain.keys(
+              "username",
+              "article_id",
+              "votevalue"
+            );
+          });
+      });
+      it("Returns an empty array for any user with no votes", () => {
+        return request
+          .get("/api/votes/unknown/articlevotes")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.votes).to.eql([]);
+          });
+      });
+    });
+    describe("/votes/:username/commentvotes", () => {
+      it("Returns an array of comment votes for a given user", () => {
+        return request
+          .get("/api/votes/lurker/commentvotes")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.votes).to.be.a("array");
+            expect(res.body.votes[0]).to.contain.keys(
+              "username",
+              "comment_id",
+              "votevalue"
+            );
+          });
+      });
+      it("Returns an empty array for any user with no votes", () => {
+        return request
+          .get("/api/votes/unknown/commentvotes")
+          .expect(200)
+          .then((res) => {
+            expect(res.body.votes).to.eql([]);
+          });
+      });
+    });
+    describe("/votes/comment/:comment_id", () => {
+      it("Add a vote for a user and comment ID and returns the vote", () => {
+        return request
+          .post("/api/votes/comment/1")
+          .send({ username: "rogersop", votevalue: -1 })
+          .expect(201)
+          .then((res) => {
+            expect(res.body.vote).to.contain.keys(
+              "username",
+              "comment_id",
+              "votevalue"
+            );
+          });
+      });
+      it("GET response is 404 when username not found", () => {
+        return request
+          .post("/api/votes/comment/1")
+          .send({ username: "not_a_real_user", votevalue: -1 })
+          .expect(422)
+          .then((res) => {
+            expect(res.body.message).to.eql(
+              "request field can not be processed"
+            );
+          });
+      });
+    });
+    describe("/votes/article/:article_id", () => {
+      it("Add a vote for a user and article ID and returns the vote", () => {
+        return request
+          .post("/api/votes/article/1")
+          .send({ username: "rogersop", votevalue: -1 })
+          .expect(201)
+          .then((res) => {
+            expect(res.body.vote).to.contain.keys(
+              "username",
+              "article_id",
+              "votevalue"
+            );
+          });
+      });
+      it("GET response is 404 when username not found", () => {
+        return request
+          .post("/api/votes/article/1")
+          .send({ username: "not_a_real_user", votevalue: -1 })
+          .expect(422)
+          .then((res) => {
+            expect(res.body.message).to.eql(
+              "request field can not be processed"
+            );
+          });
+      });
+    });
+  });
 });

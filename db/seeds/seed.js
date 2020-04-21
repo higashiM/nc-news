@@ -5,6 +5,8 @@ const {
   articleData,
   commentData,
   userData,
+  commentVoteData,
+  articleVoteData,
 } = require("../data/index.js");
 const {
   formatDates,
@@ -32,5 +34,11 @@ exports.seed = function (knex) {
       const articleRef = makeRefObj(articleRows, "title", "article_id");
       const formattedComments = formatComments(commentData, articleRef);
       return knex("comments").insert(formattedComments).returning("*");
+    })
+    .then(() => {
+      return knex("usercommentvotes").insert(commentVoteData);
+    })
+    .then(() => {
+      return knex("userarticlevotes").insert(articleVoteData);
     });
 };

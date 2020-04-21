@@ -3,7 +3,7 @@ const usersRouter = require("express").Router();
 const {
   getUsers,
   getAllUsers,
-  postUser
+  postUser,
 } = require("../controllers/usersController");
 
 usersRouter

@@ -168,5 +168,40 @@
     "queries": [],
     "exampleRequest": { "slug": "slug", "description": "description" },
     "exampleResponse": { "slug": "slug", "description": "description" }
+  },
+
+  "Get /votes/:username/articlevotes": {
+    "description": "Returns an array of article votes for a given user",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {
+      "votes": [{ "username": "rogersop", "article_id": 1, "votevalue": -1 }]
+    }
+  },
+
+  "Get /votes/:username/commentvotes": {
+    "description": "Returns an array of comment votes for a given user",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {
+      "votes": [{ "username": "rogersop", "comment_id": 1, "votevalue": -1 }]
+    }
+  },
+
+  "Post /votes/article/:article_id": {
+    "description": "Add a vote for a user and article ID and returns the vote",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {
+      "vote": { "username": "rogersop", "article_id": 1, "votevalue": -1 }
+    }
+  },
+  "Post /votes/article/:comment_id": {
+    "description": "Add a vote for a user and comment ID and returns the vote",
+    "queries": [],
+    "exampleRequest": {},
+    "exampleResponse": {
+      "vote": { "username": "rogersop", "comment_id": 1, "votevalue": -1 }
+    }
   }
 }
