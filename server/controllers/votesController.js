@@ -5,6 +5,10 @@ const {
   postcommentvote,
 } = require("../models/votesModel");
 
+const { updateCommentVote } = require("../models/commentsModel");
+
+const { incrementArticleVote } = require("../models/articlesModel");
+
 exports.addArticleVote = (req, res, next) => {
   const vote = req.body;
   const article_id = req.params.article_id;
@@ -14,7 +18,10 @@ exports.addArticleVote = (req, res, next) => {
   postarticlevote(newVote)
     .then((votes) => {
       let vote = votes[0];
-      res.status(201).send({ vote });
+      incrementArticleVote(article_id, vote.votevalue).then((articles) => {
+        const article = articles[0];
+        res.status(200).send({ vote, article });
+      });
     })
     .catch(next);
 };
@@ -27,9 +34,15 @@ exports.addCommentVote = (req, res, next) => {
 
   postcommentvote(newVote)
     .then((votes) => {
-      let vote = votes[0];
-      res.status(201).send({ vote });
+      const vote = votes[0];
+
+      updateCommentVote(comment_id, vote.voteValue).then((comments) => {
+        const comment = comments[0];
+
+        res.status(200).send({ vote, comment });
+      });
     })
+
     .catch(next);
 };
 

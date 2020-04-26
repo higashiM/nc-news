@@ -697,7 +697,7 @@ describe("/api", () => {
     });
   });
 
-  describe.only("/votes", () => {
+  describe("/votes", () => {
     describe("/votes/:username/articlevotes", () => {
       it("Returns an array of article votes for a given user", () => {
         return request
@@ -750,8 +750,9 @@ describe("/api", () => {
         return request
           .post("/api/votes/comment/1")
           .send({ username: "rogersop", votevalue: -1 })
-          .expect(201)
+          .expect(200)
           .then((res) => {
+            console.log(res.body);
             expect(res.body.vote).to.contain.keys(
               "username",
               "comment_id",
@@ -776,7 +777,7 @@ describe("/api", () => {
         return request
           .post("/api/votes/article/1")
           .send({ username: "rogersop", votevalue: -1 })
-          .expect(201)
+          .expect(200)
           .then((res) => {
             expect(res.body.vote).to.contain.keys(
               "username",
