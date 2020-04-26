@@ -191,7 +191,7 @@
   "Post /votes/article/:article_id": {
     "description": "Add a vote for a user and article ID and returns the vote",
     "queries": [],
-    "exampleRequest": {},
+    "exampleRequest": { "username": "rogersop", "votevalue": -1 },
     "exampleResponse": {
       "vote": { "username": "rogersop", "article_id": 1, "votevalue": -1 }
     }
@@ -199,7 +199,7 @@
   "Post /votes/article/:comment_id": {
     "description": "Add a vote for a user and comment ID and returns the vote",
     "queries": [],
-    "exampleRequest": {},
+    "exampleRequest": { "username": "rogersop", "votevalue": -1 },
     "exampleResponse": {
       "vote": { "username": "rogersop", "comment_id": 1, "votevalue": -1 }
     }
